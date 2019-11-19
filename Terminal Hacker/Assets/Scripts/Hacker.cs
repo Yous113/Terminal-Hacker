@@ -5,8 +5,10 @@ using UnityEngine;
 public class Hacker : MonoBehaviour
 {
     //Variables
-    public string greeting = "Hello";
-    public int level;
+    int level;
+
+    enum Screen { MainMenu, Password, Win}
+    Screen currentScreen = Screen.MainMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +18,7 @@ public class Hacker : MonoBehaviour
 
     void ShowMainMenu()
     {
+        currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
         Terminal.WriteLine("What would yoou like to hack into?");
         Terminal.WriteLine("Press 1 for the local libarary");
@@ -27,11 +30,27 @@ public class Hacker : MonoBehaviour
 
     void OnUserInput(string input)
     {
-        if (input == "menu")
+        if (input == "menu")// we can always direct to main menu
         {
             ShowMainMenu();
-        } 
-        else if(input == "1")
+        }
+        else if(currentScreen == Screen.MainMenu)
+        {
+            RunMainMenu(input);
+        }
+        
+    }
+
+    void StartGame()
+    {
+        currentScreen = Screen.Password;
+        Terminal.WriteLine("You have chosen level " + level);
+        Terminal.WriteLine("Please enter your password: ");
+    }
+
+    void RunMainMenu(string input)
+    {
+        if (input == "1")
         {
             level = 1;
             StartGame();
@@ -45,10 +64,5 @@ public class Hacker : MonoBehaviour
         {
             Terminal.WriteLine("Plese choose a valid level");
         }
-    }
-
-    void StartGame()
-    {
-        Terminal.WriteLine("You have chosen level " + level);
     }
 }
